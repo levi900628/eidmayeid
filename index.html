@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Eid Mubarak</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background:#e6f7ff;
+  font-family:sans-serif;
+  overflow:hidden;
+  transition:0.4s;
+}
+
+.container{
+  text-align:center;
+  position:relative;
+  z-index:2;
+  padding:20px;
+}
+
+h1{
+  color:#1a7f5f;
+  margin-bottom:40px;
+  font-size:28px;
+}
+
+.button-wrap{
+  position:relative;
+  width:320px;
+  height:140px;
+  margin:auto;
+}
+
+button{
+  padding:15px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  transition:0.2s;
+  position:absolute;
+  white-space:nowrap;
+}
+
+#yes{
+  background:#20b26b;
+  color:white;
+  left:20px;
+  top:40px;
+  z-index:2;
+}
+
+#no{
+  background:#d9d9d9;
+  color:#333;
+  left:180px;
+  top:40px;
+  z-index:1;
+}
+
+.decor{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.ketupat{
+  position:absolute;
+  width:40px;
+  height:40px;
+  background:#1f8a4a;
+  transform:rotate(45deg);
+  animation:fall linear forwards;
+  opacity:0.9;
+}
+
+.ketupat::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:#2fc16f;
+  transform:rotate(90deg);
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(120vh) rotate(45deg);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="decor"></div>
+
+<div class="container">
+  <h1 id="question">
+    Happy Eid Mubarak,<br>
+    kalau ada salah maafin ya 😔
+  </h1>
+
+  <div class="button-wrap">
+    <button id="yes">Maafin ❤</button>
+    <button id="no">Tidak</button>
+  </div>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const question = document.getElementById("question");
+const decor = document.querySelector(".decor");
+const wrap = document.querySelector(".button-wrap");
+
+let yesScale = 1;
+let noScale = 1;
+
+function spawnKetupat(){
+  for(let i = 0; i < 20; i++){
+
+    const ketupat = document.createElement("div");
+    ketupat.classList.add("ketupat");
+
+    ketupat.style.left = Math.random() * 100 + "vw";
+    ketupat.style.top = "-50px";
+
+    const size = Math.random() * 30 + 20;
+
+    ketupat.style.width = size + "px";
+    ketupat.style.height = size + "px";
+
+    ketupat.style.animationDuration =
+      (Math.random() * 3 + 2) + "s";
+
+    decor.appendChild(ketupat);
+
+    setTimeout(() => {
+      ketupat.remove();
+    }, 5000);
+  }
+}
+
+spawnKetupat();
+setInterval(spawnKetupat, 2500);
+
+function moveNoButton(){
+
+  const maxX = wrap.clientWidth - noBtn.offsetWidth;
+  const maxY = wrap.clientHeight - noBtn.offsetHeight;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+
+  yesScale += 0.15;
+  noScale -= 0.05;
+
+  if(noScale < 0.4){
+    noScale = 0.4;
+  }
+
+  yesBtn.style.transform = `scale(${yesScale})`;
+  noBtn.style.transform = `scale(${noScale})`;
+}
+
+noBtn.addEventListener("mouseover", moveNoButton);
+noBtn.addEventListener("click", moveNoButton);
+
+yesBtn.addEventListener("click", () => {
+
+  question.innerHTML = `
+    YEYYY AKU DIMAAFIN
+  `;
+
+  document.body.style.background = "#d8ffe8";
+
+  const waMessage = encodeURIComponent(
+    "hai aku maafin kamu :3"
+  );
+
+  window.open(
+    `https://api.whatsapp.com/send?phone=6282254247673&text=${waMessage}`,
+    "_blank"
+  );
+});
+</script>
+
+</body>
+</html>
